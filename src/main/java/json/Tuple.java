@@ -11,4 +11,12 @@ public class Tuple<K, V> {
         this.key = key;
         this.value = value;
     }
+
+    public K getKey() {
+        return key;
+    }
+
+    public V getValue() {
+        return value;
+    }
 }

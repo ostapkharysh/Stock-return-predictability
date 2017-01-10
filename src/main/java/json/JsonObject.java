@@ -10,6 +10,7 @@ public class JsonObject extends Json {
 
     private int count;
     private final ArrayList<JsonPair> jsPairs = new ArrayList<JsonPair>(); ;
+
     public JsonObject(JsonPair... jsonPairs) {
         for(JsonPair p: jsonPairs){
             this.add(p);
