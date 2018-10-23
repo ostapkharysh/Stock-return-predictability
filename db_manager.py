@@ -19,7 +19,7 @@ def create_connection(db_file):
     return None
 
 
-def create_task(conn, task, table_name):
+def create_task(conn, task):
     """
     Create a new task
     :param conn:
@@ -27,8 +27,8 @@ def create_task(conn, task, table_name):
     :return:
     """
 
-    sql = ''' INSERT INTO ''' + str(table_name)+''' (date_time, title, article_text, link)
-              VALUES(?,?,?,?                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ) '''
+    sql = ''' INSERT INTO News(date_time, title, article_text, link)
+              VALUES(?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, task)
     return cur.lastrowid
