@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
 
-from DB import Base, Agency, News, db_link
+from db_management.DB import Base, Agency, News, db_link
 
 
 def add_agency(agency_name):

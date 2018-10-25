@@ -1,3 +1,5 @@
+
+
 db_link = 'sqlite:////home/ostapkharysh/Documents/bt_data/DB/news_info.db'
 
 import os
