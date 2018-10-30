@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
 
 from db_management.DB import Base, Agency, News, db_link
@@ -24,13 +24,20 @@ def add_agency(agency_name):
     session = DBSession()
 
     data = session.query(Agency).all()
+    print(data)
     if agency_name in [el.name for el in data]:
         return "There is already a Table with such name: {}".format(agency_name)
 
     # Insert a Agency in the agency table
     new_agency = Agency(name=agency_name)
     session.add(new_agency)
-    session.commit()
+    try:
+        session.commit()
+    except:
+        session.rollback()
+    finally:
+        session.close()
+    
     return "The new table {} is created.".format(agency_name)
 
 
@@ -46,7 +53,12 @@ def add_news(d_t, ttl, ar_txt, lnk, agency_name):
         cur_agency = session.query(Agency).filter_by(name=agency_name).first()
         new_news = News(date_time=d_t, title=ttl, article_text=ar_txt, link=lnk, agency=cur_agency)
         session.add(new_news)
-        session.commit()
+        try:
+            session.commit()
+        except:
+            session.rollback()
+        finally:
+            session.close()
 
     except IntegrityError:
         session.rollback()
