@@ -1,6 +1,6 @@
 
 
-db_link = 'sqlite:////home/ostapkharysh/Documents/bt_data/DB/news_info.db'
+db_link = 'postgresql://ostapkharysh:thesis@localhost:5432/news'
 
 import os
 import sys

@@ -6,7 +6,7 @@ from db_management.DB import Base, Agency, News, db_link
 
 
 def add_agency(agency_name):
-    engine = create_engine(db_link)
+    engine = create_engine(db_link) #  pool_size=20, max_overflow=0
     # Bind the engine to the metadata of the Base class so that the
     # declaratives can be accessed through a DBSession instance
     Base.metadata.bind = engine
@@ -43,7 +43,9 @@ def add_agency(agency_name):
 
 def add_news(d_t, ttl, ar_txt, lnk, agency_name):
     # Insert an news in the address table
+    
     engine = create_engine(db_link)
+    engine.pool_timeout = 60
     Base.metadata.bind = engine
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
