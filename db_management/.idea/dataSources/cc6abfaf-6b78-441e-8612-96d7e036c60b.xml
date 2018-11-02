@@ -64,8 +64,8 @@
       <ObjectId>2200</ObjectId>
       <Comment>standard public schema</Comment>
       <Owner>postgres</Owner>
-      <IntrospectionTimestamp>2018-10-31.23:18:17.213</IntrospectionTimestamp>
-      <IntrospectionStateNumber>1754</IntrospectionStateNumber>
+      <IntrospectionTimestamp>2018-11-02.12:45:02.112</IntrospectionTimestamp>
+      <IntrospectionStateNumber>2957</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -117,7 +117,7 @@
     <table id="22" parent="12" name="news">
       <ObjectId>16397</ObjectId>
       <Owner>ostapkharysh</Owner>
-      <StateNumber>1754</StateNumber>
+      <StateNumber>2957</StateNumber>
     </table>
     <column id="23" parent="21" name="id">
       <Position>1</Position>
