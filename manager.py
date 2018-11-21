@@ -41,7 +41,7 @@ def add_agency(agency_name):
     return "The new table {} is created.".format(agency_name)
 
 
-def add_news(d_t, ttl, ar_txt, lnk, agency_name):
+def add_news(info_dict, agency_name):
     # Insert an news in the address table
     
     engine = create_engine(db_link)
@@ -50,24 +50,31 @@ def add_news(d_t, ttl, ar_txt, lnk, agency_name):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
+    cur_agency = session.query(Agency).filter_by(name=agency_name).first()
+    if not cur_agency:
+        cur_agency = Agency(name=agency_name)
+    print("Cur agency")
     try:
 
-        cur_agency = session.query(Agency).filter_by(name=agency_name).first()
-        new_news = News(date_time=d_t, title=ttl, article_text=ar_txt, link=lnk, agency=cur_agency)
-        session.add(new_news)
-        try:
-            session.commit()
-        except:
-            session.rollback()
-        finally:
-            session.close()
+        for key in info_dict.keys():
+            new_news = News(date_time=info_dict[key][0], title=info_dict[key][1], article_text=info_dict[key][2], link=key, agency=cur_agency)
+            session.add(new_news)
+        session.commit()
 
     except IntegrityError:
         session.rollback()
-        return 'The link provided seems to exist in DB: {}'.format(lnk)
+        return 'The link provided seems to exist in DB: {}'.format(key)
 
     except InvalidRequestError:
         session.rollback()
         return 'You are requesting access to the non-existing source'
 
-    return "The news has been successfully added"
+    try:
+        print("COMMITING...")
+        session.commit()
+    except:
+        session.rollback()
+    finally:
+        session.close()
+
+    print("The news has been successfully added")

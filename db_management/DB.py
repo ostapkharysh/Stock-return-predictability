@@ -1,9 +1,8 @@
 
 
-db_link = 'postgresql://ostapkharysh:thesis@localhost:5432/news'
+#db_link = 'postgresql://ostapkharysh:thesis@localhost:5432/news'
+db_link = 'sqlite:////home/ostapkharysh/Documents/bt_data/DB/News'
 
-import os
-import sys
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -25,7 +24,7 @@ class News(Base):
     id = Column(Integer, primary_key=True)
     date_time = Column(String(250))
     title = Column(String(250))
-    article_text = Column(String(1000))
+    article_text = Column(String(100000))
     link = Column(String(250), unique=True)  # nullable=False
     agency_id = Column(Integer, ForeignKey('agency.id'))
     agency = relationship(Agency)

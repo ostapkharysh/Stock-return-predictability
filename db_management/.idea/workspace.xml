@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="50b9a8de-7445-44b5-a508-54c2190a487b" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/cc6abfaf-6b78-441e-8612-96d7e036c60b.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/cc6abfaf-6b78-441e-8612-96d7e036c60b.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/cc6abfaf-6b78-441e-8612-96d7e036c60b/storage_v2/_src_/database/news.04ozAA/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/cc6abfaf-6b78-441e-8612-96d7e036c60b/storage_v2/_src_/database/news.04ozAA/schema/public.abK9xQ.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../retrieve_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../db_manager.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../news.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../retrieve_data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../retrieve_data.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../reu.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +58,7 @@
     <session id="-308461536">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="2" />
           <entry key="project.open.time.42" value="1" />
           <entry key="project.open.time.47" value="1" />
           <entry key="project.open.time.7" value="1" />
@@ -290,7 +286,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="64" y="-11" width="1303" height="780" extended-state="6" />
+    <frame x="65" y="-4" width="1301" height="772" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26693228" />
