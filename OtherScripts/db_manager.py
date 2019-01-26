@@ -27,8 +27,8 @@ def create_task(conn, task):
     :return:
     """
 
-    sql = ''' INSERT INTO News(date_time, title, article_text, link)
-              VALUES(?,?,?,?) '''
+    sql = ''' INSERT INTO News(V2.1DATE, V2SOURCECOLLECTIONIDENTIFIER, V2SOURCECOMMONNAME, V2DOCUMENTIDENTIFIER, V1LOCATIONS, V1ORGANIZATIONS, V1.5TONE, V2GCAM, V2.1ALLNAMES, TITLE)
+              VALUES(?,?,?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, task)
     return cur.lastrowid

@@ -2,10 +2,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
 
-from db_management.DB import Base, Agency, News, db_link
+from db_management.DB import Base, Company, News, db_link
 
 
-def add_agency(agency_name):
+def add_company(company):
     engine = create_engine(db_link) #  pool_size=20, max_overflow=0
     # Bind the engine to the metadata of the Base class so that the
     # declaratives can be accessed through a DBSession instance
@@ -23,14 +23,14 @@ def add_agency(agency_name):
 
     session = DBSession()
 
-    data = session.query(Agency).all()
+    data = session.query(Company).all()
     print(data)
-    if agency_name in [el.name for el in data]:
-        return "There is already a Table with such name: {}".format(agency_name)
+    if company in [el.name for el in data]:
+        return "There is already a Table with such name: {}".format(company)
 
-    # Insert a Agency in the agency table
-    new_agency = Agency(name=agency_name)
-    session.add(new_agency)
+    # Insert a company in the Comapny table
+    DBcompany = Company(name=company)
+    session.add(DBcompany)
     try:
         session.commit()
     except:
@@ -38,10 +38,10 @@ def add_agency(agency_name):
     finally:
         session.close()
     
-    return "The new table {} is created.".format(agency_name)
+    return "The new table {} is created.".format(company)
 
 
-def add_news(info_dict, agency_name):
+def add_news(info_dict):
     # Insert an news in the address table
     
     engine = create_engine(db_link)
@@ -50,31 +50,35 @@ def add_news(info_dict, agency_name):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
-    cur_agency = session.query(Agency).filter_by(name=agency_name).first()
-    if not cur_agency:
-        cur_agency = Agency(name=agency_name)
-    print("Cur agency")
-    try:
 
-        for key in info_dict.keys():
-            new_news = News(date_time=info_dict[key][0], title=info_dict[key][1], article_text=info_dict[key][2], link=key, agency=cur_agency)
-            session.add(new_news)
+    company = info_dict['comp_index']
+
+    cur_company = session.query(Company).filter_by(name=company).first()
+    if not cur_company:
+        print("Not found. Creating company: {}".format(company))
+        cur_company = Company(name=company)
+
+    try:
+        key = info_dict.keys()
+        new_news = News(DATE=str(info_dict[key[0]]), SOURCECOLLECTIONIDENTIFIER= int(info_dict[key[1]]), SOURCECOMMONNAME=info_dict[key[2]], DOCUMENTIDENTIFIER=info_dict[key[3]], LOCATIONS=info_dict[key[4]],
+                        ORGANIZATIONS=info_dict[key[5]], TONE=info_dict[key[6]], GCAM=info_dict[key[7]], ALLNAMES=info_dict[key[8]], TITLE=info_dict[key[9]], company_id=info_dict[key[10]])
+        session.add(new_news)
         session.commit()
 
     except IntegrityError:
         session.rollback()
-        return 'The link provided seems to exist in DB: {}'.format(key)
+        return 'The link provided seems to exist in DB: {}'.format(info_dict[key[3]])
 
     except InvalidRequestError:
         session.rollback()
         return 'You are requesting access to the non-existing source'
 
     try:
-        print("COMMITING...")
+        #print("COMMITING...")
         session.commit()
     except:
         session.rollback()
     finally:
         session.close()
 
-    print("The news has been successfully added")
+    #print("The news has been successfully added")
