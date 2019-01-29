@@ -70,7 +70,7 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
     start_doc, finish_doc = start_date + '.gkg.csv', finish_date + '.gkg.csv'
     selected_period = time_periods[time_periods.index(start_doc):time_periods.index(finish_doc) + 1]
 
-    companies = pd.read_csv('SnP500Top10.csv')
+    companies = pd.read_csv('additional_data/SnP500Top10.csv')
     selected_company = companies.loc[companies['index'] == comp_index]
     affiliates = [re.sub('[!@#$.]', '', el.lower().lstrip(' ').replace(' ', '-'))
                   for el in selected_company['affiliate'].values[0].split(',')]
@@ -118,4 +118,4 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
     print("TOTAL NEWS ADDED: {}".format(total_news))
 
 # '20160104220000'
-filter_and_store_newsdata('AAPL', '20160202173000', '20170101000000')
+filter_and_store_newsdata('AAPL', '20161220091500', '20170101000000')
