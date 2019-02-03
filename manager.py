@@ -60,8 +60,16 @@ def add_news(info_dict):
 
     try:
         key = info_dict.keys()
-        new_news = News(DATE=str(info_dict[key[0]]), SOURCECOLLECTIONIDENTIFIER= int(info_dict[key[1]]), SOURCECOMMONNAME=info_dict[key[2]], DOCUMENTIDENTIFIER=info_dict[key[3]], LOCATIONS=info_dict[key[4]],
-                        ORGANIZATIONS=info_dict[key[5]], TONE=info_dict[key[6]], GCAM=info_dict[key[7]], ALLNAMES=info_dict[key[8]], TITLE=info_dict[key[9]], company_id=info_dict[key[10]])
+        # WITH SOURCECOLLECTIONIDENTIFIER  AND TITLE
+        #new_news = News(DATE=str(info_dict[key[0]]), SOURCECOLLECTIONIDENTIFIER= int(info_dict[key[1]]), SOURCECOMMONNAME=info_dict[key[2]], DOCUMENTIDENTIFIER=info_dict[key[3]], LOCATIONS=info_dict[key[4]],
+        #                ORGANIZATIONS=info_dict[key[5]], TONE=info_dict[key[6]], GCAM=info_dict[key[7]], ALLNAMES=info_dict[key[8]], TITLE=info_dict[key[9]], company_id=info_dict[key[10]])
+
+        #WITHOUT SOURCECOLLECTIONIDENTIFIER  AND TITLE
+        new_news = News(DATE=str(info_dict[key[0]]),
+                        SOURCECOMMONNAME=info_dict[key[2]], DOCUMENTIDENTIFIER=info_dict[key[3]],
+                        #LOCATIONS=info_dict[key[4]],
+                        ORGANIZATIONS=info_dict[key[5]], TONE=info_dict[key[6]], GCAM=info_dict[key[7]],
+                        ALLNAMES=info_dict[key[8]], company_id=cur_company.id)
         session.add(new_news)
         session.commit()
 

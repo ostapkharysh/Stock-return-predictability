@@ -1,6 +1,7 @@
 
 
-db_link = 'sqlite://///media/ostapkharysh/SP_PHD_U3/database/NO_title.db'
+#db_link = 'sqlite://///media/ostapkharysh/SP_PHD_U3/database/NO_title_GOOG.db'
+db_link = 'postgresql://ostap:12345@localhost:5432/goog'
 
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
@@ -23,19 +24,20 @@ class News(Base):
     __tablename__ = 'news'
     # define columns for the table news.
     id = Column(Integer, primary_key=True)
-    DATE = Column(String(100))
-    SOURCECOLLECTIONIDENTIFIER = Column(Integer)
-    SOURCECOMMONNAME = Column(String(100))
-    DOCUMENTIDENTIFIER = Column(String(500))
-    LOCATIONS = Column(String(1000))
-    ORGANIZATIONS = Column(String(500))
-    TONE = Column(String(1000)) 
-    GCAM = Column(String(5000))
-    ALLNAMES = Column(String(1000))
-    TITLE = Column(String(500))
+    DATE = Column(String(20))
+    #SOURCECOLLECTIONIDENTIFIER = Column(Integer)
+    SOURCECOMMONNAME = Column(String(50))
+    DOCUMENTIDENTIFIER = Column(String(300))
+    #LOCATIONS = Column(String(10003))
+    ORGANIZATIONS = Column(String(6000)) # REDUCE
+    TONE = Column(String(150)) 
+    GCAM = Column(String(30000))
+    ALLNAMES = Column(String(6000))  # REDUCE
+    #TITLE = Column(String(200))
 
-    company_id = Column(Integer, ForeignKey('company.id'))
     company = relationship(Company)
+    company_id = Column(Integer, ForeignKey('company.id'))
+
 
 
 # Create an engine that stores data in the local directory's

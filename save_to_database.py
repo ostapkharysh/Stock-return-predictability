@@ -52,6 +52,7 @@ def get_text(link):
     except Exception:
         return " ".join(link.split('/')[-1].split("-"))
 
+
 def store(news, cp_idx_title):
     news['comp_index'] = cp_idx_title[0]
     if cp_idx_title[1]:
@@ -60,6 +61,9 @@ def store(news, cp_idx_title):
 
 
 def filter_and_store_newsdata(comp_index, start_date, finish_date):
+
+    count = 0
+
     startDT = datetime.datetime.now()
     print("STARTING SCRIPT: {}".format(str(startDT)))
 
@@ -67,6 +71,7 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
     directory = "//media/ostapkharysh/SP_PHD_U3/gdelt"
 
     time_periods = os.listdir(directory)
+    print(len(sorted(time_periods)))
     start_doc, finish_doc = start_date + '.gkg.csv', finish_date + '.gkg.csv'
     selected_period = time_periods[time_periods.index(start_doc):time_periods.index(finish_doc) + 1]
 
@@ -78,7 +83,8 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
     print(selected_period)
     print(affiliates)
 
-    print(add_company(comp_index))
+    # ADDING COMPANY
+    add_company(comp_index)
 
     for per in selected_period:
         try:
@@ -86,7 +92,7 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
         except Exception:
             print("EXCP {}".format(per))
             continue
-            #data = pd.read_csv(directory + '/' + per, delimiter='\t', header=None, engine='c')
+
         filtered_data = data[[1, 2, 3, 4, 9, 13, 15, 17, 23]]
         filtered_data.columns = ['V2.1DATE', 'V2SOURCECOLLECTIONIDENTIFIER', 'V2SOURCECOMMONNAME',
                                  'V2DOCUMENTIDENTIFIER', 'V1LOCATIONS',
@@ -95,19 +101,54 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
         pd.options.mode.chained_assignment = None
         filtered_data['TITLE'] = np.nan
 
+        # ALLNAMES : VERY BROAD SPECIFICATION OF NAME
+        # ORGANIZATIONS: MORE PRECISE SPECIFICATION OF NAME
+
+        # DECIDED TO MOVE WITH ONLY "AFF" APPEAREANce IN ALLNAMES AND ORGANIZATIONS
+
         important_news = list()
+
         for aff in affiliates:
             for idx, el in enumerate(filtered_data['V2DOCUMENTIDENTIFIER']):
-                if aff in str(el) or aff in str(filtered_data['V2.1ALLNAMES'][idx]).lower() or aff in str(
-                        filtered_data['V1ORGANIZATIONS'][idx]).lower():
+
+                decision = False
+                all_names = False
+                organizations = False
+
+                if filtered_data['V2SOURCECOLLECTIONIDENTIFIER'][idx] == 1:
+
+                    if aff in str(el):
+                        decision = True
+                    if aff in str(filtered_data['V2.1ALLNAMES'][idx]).lower():
+                        filtered_data['V2.1ALLNAMES'][idx] = aff
+                        all_names = True
+                    if aff in str(filtered_data['V1ORGANIZATIONS'][idx]).lower():
+                        filtered_data['V1ORGANIZATIONS'][idx] = aff
+                        organizations = True
+
+                if decision or all_names or organizations:
+
+                    # Reducing the size of values
+                    if len(filtered_data['V2GCAM'][idx]) > 25000:
+                        print('V2GCAM to large!')
+                        count +=1
+                    filtered_data['V2GCAM'][idx] = filtered_data['V2GCAM'][idx][:29950] + '...' \
+                        if len(filtered_data['V2GCAM'][idx]) > 30000 else filtered_data['V2GCAM'][idx]
+
+                    # Value optimisation
+                    if not organizations:
+                        filtered_data['V1ORGANIZATIONS'][idx] = None
+                    if not all_names:
+                        filtered_data['V2.1ALLNAMES'][idx] = None
                     important_news.append(filtered_data.iloc[idx])
+                else:
+                    pass
 
         pool = Pool(processes=cpu_count())
 
         infer = partial(store, cp_idx_title=[comp_index, False])
 
         pool.map(infer, important_news)
-
         pool.close()
         pool.join()
 
@@ -116,6 +157,8 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
         print("FINISHED PERIOD: {}, ADDED {} NEWS".format(per.split(".")[0], len(important_news)))
     print("FINISHED AT: {}".format(str(datetime.datetime.now() - startDT)))
     print("TOTAL NEWS ADDED: {}".format(total_news))
+    print(count)
+
 
 # '20160104220000'
-filter_and_store_newsdata('AAPL', '20161220091500', '20170101000000')
+filter_and_store_newsdata('GOOG', '20160612051500', '20170701000000')
