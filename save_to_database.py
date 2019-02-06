@@ -70,7 +70,7 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
     total_news = 0
     directory = "//media/ostapkharysh/SP_PHD_U3/gdelt"
 
-    time_periods = os.listdir(directory)
+    time_periods = sorted(os.listdir(directory))
     print(len(sorted(time_periods)))
     start_doc, finish_doc = start_date + '.gkg.csv', finish_date + '.gkg.csv'
     selected_period = time_periods[time_periods.index(start_doc):time_periods.index(finish_doc) + 1]
@@ -161,4 +161,4 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
 
 
 # '20160104220000'
-filter_and_store_newsdata('GOOG', '20160612051500', '20170701000000')
+filter_and_store_newsdata('GOOG', '20181231010000', '20190101000000')
