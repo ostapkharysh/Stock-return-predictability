@@ -22,7 +22,7 @@ csv.field_size_limit(sys.maxsize)
 def get_text(link):
     start = datetime.datetime.now()
     try:
-        while (datetime.datetime.now() - start).seconds < 5:
+        while (datetime.datetime.now() - start).seconds < 4:
             session = requests.Session()
             session.max_redirects = 5
             r = session.get(link, verify=False)
@@ -131,9 +131,14 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
                     # Reducing the size of values
                     if len(filtered_data['V2GCAM'][idx]) > 25000:
                         print('V2GCAM to large!')
-                        count +=1
+                        count += 1
                     filtered_data['V2GCAM'][idx] = filtered_data['V2GCAM'][idx][:29950] + '...' \
                         if len(filtered_data['V2GCAM'][idx]) > 30000 else filtered_data['V2GCAM'][idx]
+                    if len(str(filtered_data['TITLE'][idx])) > 1499:
+                        print('TITLE to large!')
+                        count += 1
+                    filtered_data['TITLE'][idx] = filtered_data['TITLE'][idx][:1450] + '...' \
+                        if len(str(filtered_data['TITLE'][idx])) > 1500 else filtered_data['TITLE'][idx]
 
                     # Value optimisation
                     if not organizations:
@@ -146,7 +151,7 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
 
         pool = Pool(processes=cpu_count())
 
-        infer = partial(store, cp_idx_title=[comp_index, False])
+        infer = partial(store, cp_idx_title=[comp_index, True])
 
         pool.map(infer, important_news)
         pool.close()
@@ -161,4 +166,5 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
 
 
 # '20160104220000'
-filter_and_store_newsdata('GOOG', '20181231010000', '20190101000000')
+filter_and_store_newsdata('GOOG', '20160101091500', '20190101000000')
+#20160101091500
