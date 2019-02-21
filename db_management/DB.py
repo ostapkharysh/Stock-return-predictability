@@ -33,7 +33,7 @@ class News(Base):
     TONE = Column(String(150)) 
     GCAM = Column(String(30000))
     ALLNAMES = Column(String(6000))  # REDUCE
-    TITLE = Column(String(500))
+    TITLE = Column(String(2000))
 
     company = relationship(Company)
     company_id = Column(Integer, ForeignKey('company.id'))

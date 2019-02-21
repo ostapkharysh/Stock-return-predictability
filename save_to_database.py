@@ -19,45 +19,61 @@ requests.adapters.DEFAULT_RETRIES = 5
 csv.field_size_limit(sys.maxsize)
 
 
-def get_text(link):
-    start = datetime.datetime.now()
-    try:
-        while (datetime.datetime.now() - start).seconds < 4:
-            session = requests.Session()
-            session.max_redirects = 5
-            r = session.get(link, verify=False)
-            soup = BS(r.content, 'html.parser')
-            if soup.html.title:
-                head = soup.html.title.string.strip().lower()
-                if "|" in head:
-                    head = head.split("|")[0]
-                return head
-            else:
-                return " ".join(link.split('/')[-1].split("-"))
-        print("LONG EXECUTION")
+def link_cutter(link):
+    if link.split('/')[-1]:
+        print(link.split('/')[-1])
         return " ".join(link.split('/')[-1].split("-"))
+    else:
+        return " ".join(link.split('/')[-2].split("-"))
+
+def get_text(link):
+    #start = datetime.datetime.now()
+    try:
+        #while (datetime.datetime.now() - start).seconds < 3:
+        session = requests.Session()
+        session.max_redirects = 5
+        r = session.get(link, timeout=5,  verify=False)
+        soup = BS(r.content, 'html.parser')
+        if soup.html.title:
+            head = soup.html.title.string.strip().lower()
+            if "|" in head:
+                head = head.split("|")[0]
+            if "404" in head or "not found" in head:
+                head = link_cutter(link)
+            return head
+        else:
+            return link_cutter(link)
+        #print("LONG EXECUTION")
+        #return link_cutter(link)
 
     except AttributeError:
         print("No article found by this link!", link)
-        return " ".join(link.split('/')[-1].split("-"))
+        return link_cutter(link)
     except MissingSchema:
         print('invalid url {} '.format(link))
-        return " ".join(link.split('/')[-1].split("-"))
+        return link_cutter(link)
     except TooManyRedirects:
         print('To many redirects')
-        return " ".join(link.split('/')[-1].split("-"))
+        return link_cutter(link)
     except ConnectionError as e:
         print(e)
-        return " ".join(link.split('/')[-1].split("-"))
+        return link_cutter(link)
     except Exception:
-        return " ".join(link.split('/')[-1].split("-"))
+        return link_cutter(link)
 
 
 def store(news, cp_idx_title):
     news['comp_index'] = cp_idx_title[0]
+
     if cp_idx_title[1]:
         news['TITLE'] = get_text(news['V2DOCUMENTIDENTIFIER'])
+
+    if len(str(news['TITLE'])) > 1999:
+        print('TITLE to large!')
+    news['TITLE'] = news['TITLE'][:1950] + '...' \
+        if len(str(news['TITLE'])) > 2000 else news['TITLE']
     add_news(news)
+
 
 
 def filter_and_store_newsdata(comp_index, start_date, finish_date):
@@ -110,7 +126,6 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
 
         for aff in affiliates:
             for idx, el in enumerate(filtered_data['V2DOCUMENTIDENTIFIER']):
-
                 decision = False
                 all_names = False
                 organizations = False
@@ -127,18 +142,12 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
                         organizations = True
 
                 if decision or all_names or organizations:
-
                     # Reducing the size of values
                     if len(filtered_data['V2GCAM'][idx]) > 25000:
                         print('V2GCAM to large!')
                         count += 1
                     filtered_data['V2GCAM'][idx] = filtered_data['V2GCAM'][idx][:29950] + '...' \
                         if len(filtered_data['V2GCAM'][idx]) > 30000 else filtered_data['V2GCAM'][idx]
-                    if len(str(filtered_data['TITLE'][idx])) > 1499:
-                        print('TITLE to large!')
-                        count += 1
-                    filtered_data['TITLE'][idx] = filtered_data['TITLE'][idx][:1450] + '...' \
-                        if len(str(filtered_data['TITLE'][idx])) > 1500 else filtered_data['TITLE'][idx]
 
                     # Value optimisation
                     if not organizations:
@@ -166,5 +175,4 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
 
 
 # '20160104220000'
-filter_and_store_newsdata('GOOG', '20160101091500', '20190101000000')
-#20160101091500
+filter_and_store_newsdata('GOOG', '20160204160000', '20190101000000')
