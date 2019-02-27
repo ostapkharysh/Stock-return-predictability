@@ -175,4 +175,4 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
 
 
 # '20160104220000'
-filter_and_store_newsdata('GOOG', '20160204160000', '20190101000000')
+filter_and_store_newsdata('GOOG', '20160308120000', '20190101000000')
