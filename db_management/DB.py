@@ -2,7 +2,7 @@
 
 #db_link = 'sqlite://///media/ostapkharysh/SP_PHD_U3/database/NO_title_GOOG.db'
 #db_link = 'postgresql://ostap:12345@localhost:5432/goog'   #google with no titles
-db_link = 'postgresql://ostap:12345@localhost:5432/googtitle'
+db_link = 'postgresql://ostap:12345@localhost:5432/aapl'
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -11,7 +11,6 @@ from sqlalchemy import create_engine
 
 
 Base = declarative_base()
-
 
 class Company(Base):
     __tablename__ = 'company'
@@ -33,7 +32,7 @@ class News(Base):
     TONE = Column(String(150)) 
     GCAM = Column(String(30000))
     ALLNAMES = Column(String(6000))  # REDUCE
-    TITLE = Column(String(2000))
+    #TITLE = Column(String(2000))
 
     company = relationship(Company)
     company_id = Column(Integer, ForeignKey('company.id'))

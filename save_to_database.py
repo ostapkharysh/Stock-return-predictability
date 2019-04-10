@@ -65,13 +65,13 @@ def get_text(link):
 def store(news, cp_idx_title):
     news['comp_index'] = cp_idx_title[0]
 
-    if cp_idx_title[1]:
-        news['TITLE'] = get_text(news['V2DOCUMENTIDENTIFIER'])
+    #if cp_idx_title[1]:
+        # news['TITLE'] = get_text(news['V2DOCUMENTIDENTIFIER'])
 
-    if len(str(news['TITLE'])) > 1999:
-        print('TITLE to large!')
-    news['TITLE'] = news['TITLE'][:1950] + '...' \
-        if len(str(news['TITLE'])) > 2000 else news['TITLE']
+    # if len(str(news['TITLE'])) > 1999:
+    #     print('TITLE to large!')
+    # news['TITLE'] = news['TITLE'][:1950] + '...' \
+    #     if len(str(news['TITLE'])) > 2000 else news['TITLE']
     add_news(news)
 
 
@@ -160,7 +160,7 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
 
         pool = Pool(processes=cpu_count())
 
-        infer = partial(store, cp_idx_title=[comp_index, True])
+        infer = partial(store, cp_idx_title=[comp_index, False])
 
         pool.map(infer, important_news)
         pool.close()
@@ -175,4 +175,4 @@ def filter_and_store_newsdata(comp_index, start_date, finish_date):
 
 
 # '20160104220000'
-filter_and_store_newsdata('GOOG', '20160308120000', '20190101000000')
+filter_and_store_newsdata('AAPL', '20160721173000', '20190101000000')

@@ -68,7 +68,7 @@ def add_news(info_dict):
         new_news = News(DATE=str(info_dict[key[0]]),
                         SOURCECOMMONNAME=info_dict[key[2]], DOCUMENTIDENTIFIER=info_dict[key[3]],
                         #LOCATIONS=info_dict[key[4]],
-                        TITLE=info_dict[key[9]],
+                        #TITLE=info_dict[key[9]],
                         ORGANIZATIONS=info_dict[key[5]], TONE=info_dict[key[6]], GCAM=info_dict[key[7]],
                         ALLNAMES=info_dict[key[8]], company_id=cur_company.id)
         session.add(new_news)
