@@ -2,7 +2,7 @@
 
 #db_link = 'sqlite://///media/ostapkharysh/SP_PHD_U3/database/NO_title_GOOG.db'
 #db_link = 'postgresql://ostap:12345@localhost:5432/goog'   #google with no titles
-db_link = 'postgresql://ostap:12345@localhost:5432/aapl'
+db_link = 'postgresql://ostap:12345@localhost:5432/fb'
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
